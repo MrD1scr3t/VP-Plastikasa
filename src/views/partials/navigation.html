@@ -1,0 +1,43 @@
+<nav id="barra" class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid">
+      <!-- Botón en la izquierda -->
+      <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button> -->
+      <!-- Botón en la izquierda -->
+      <button class="btn btn-primary me-2 rounded-circle transparent-bg" style="width: 40px; height: 40px;" onclick="Home()">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+
+      <a class="navbar-brand mrp">
+        <img src="/img/logo.png" alt="Logo" width="70%" height="30%" class="d-inline-block align-top">
+      </a>
+
+      <!-- <a class="navbar-brand" href="#"> -->
+           <!-- <span id="sucursal" style="font-size: 1.0em;"></span>  -->
+           <h3 class="d-inline-block align-bottom allign-text-bottom mt-1" id="sucursal" ></h2>
+
+      <!-- </a> -->
+
+      <!-- Contenido del Navbar -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+         
+        </ul>
+      </div>
+    </div>
+
+    
+</nav>
+
+<div class="progress" style="height: 4px;">
+    <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+
+  <script>
+    function Home(){
+      localStorage.removeItem('ObjetoGuardado');
+        window.location.href = "/";
+    }
+
+  </script>

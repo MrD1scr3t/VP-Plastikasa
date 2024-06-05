@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Lector <%= title %>
+    </title>
+    <%- include('partials/head.html') %>
+</head>
+
+<body>
+    <div class="container ">
+        <div class="col-xs-12 text-center">
+            <div id="elemento-encabezados">
+                <img src="/img/logo.png" alt="Logo" class="m-5">
+                <h2>¿Que producto quieres verificar?</h2>
+                <p>Escanea el código de barras para verificar el producto</p>
+            </div>
+
+            
+
+            <div class="row mt-3 mb-3 d-flex flex-row justify-content-center px-1" id="elemento-input">
+                <div class="col-xl-6 col-lg-6 col-xs-4">
+                    <input type="text" class="form-control btn-lector btn-search-padding "
+                        placeholder="Ingresa un código de barras manualmente" id="input-search">
+
+                </div>
+                <button class="btn-lector-input" id="btnTeclado"><img src="/img/icon-keyboard.png" alt=""
+                        class="img-keyboard"></button>
+            </div>
+            <div class="row d-flex justify-content-center" id="elemento-teclado">
+                <div class="col-xl-6 col-lg-6 col-xs-4 row row-cols-3">
+                    <% data.arregloTeclado.forEach(function(tecla, i) { switch(tecla.val) { case 0: %>
+                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 px-1">
+                            <button class="btn-lector btn-teclado " onclick='addNumber("<%= tecla.val %>")'>
+                                <%= tecla.val %>
+                            </button>
+                        </div>
+                    <% break; case 'delete' : %>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4 px-1" onclick="">
+                            <button class="btn-lector btn-teclado " onclick="" id="btnDelete"><img class="img-icon" src="/img/icon-delete.png"
+                                    alt="" >
+                            </button>
+                        </div>
+                    <% break; case 'search' : %>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 px-1">
+                            <button class="btn-lector btn-teclado " onclick="BuscarEtiquetaManual()">Buscar<img class="img-icon mx-3"
+                                    src="/img/icon-search.png" alt=""></button>
+                        </div>
+                    <% break; default: %>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4 px-1">
+                            <button class="btn-lector btn-teclado "  onclick='addNumber("<%= tecla.val %>")'>
+                                <%= tecla.val %>
+                            </button>
+                        </div>
+                    <% break; } }); %>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    const input = document.getElementById('elemento-input');
+    const teclado = document.getElementById('elemento-teclado');
+    const encabezados = document.getElementById('elemento-encabezados');
+    const borrarBtn = document.getElementById('btnDelete');
+    var search = document.getElementById('input-search');
+    var intervalId;
+
+    document.getElementById('btnTeclado').onclick = () => {
+        // input.classList.toggle('move1');
+        teclado.classList.toggle('fade');
+        encabezados.classList.toggle('fade');
+    };
+
+    function addNumber(number) {
+        var valor = search.value ;
+        if(valor === undefined) {
+            var valor = '';
+        }
+        valor = valor + number;
+        search.value = valor;
+    }
+
+    function delNumber() {
+        var valor = search.value;
+        search.value = valor.slice(0,-1);
+    }
+
+    borrarBtn.addEventListener('mousedown', function() {
+        intervalId = setInterval(delNumber, 100); 
+    });
+
+    borrarBtn.addEventListener('mouseup', function() {
+        clearInterval(intervalId); 
+    });
+
+    window.onload = function() {
+       $("#input-search").focus();
+    };
+
+    document.getElementById('input-search').addEventListener('keypress', function(event) {
+        var barcode = event.target.value;
+        if (event.keyCode === 13) { // 13 es el código de tecla "Enter"
+
+             var valor = document.getElementById("input-search").value;
+
+            var data = {
+                clave: valor
+            };
+
+            fetch('http://192.100.6.246:80/verificar', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del servidor:', data);
+                document.getElementById("input-search").value = '';
+                window.location.href = "articulo";
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            console.log('Código de barras escaneado:', barcode);
+
+            // Aquí puedes hacer lo que quieras con el código de barras escaneado
+            event.target.value = ''; // Limpiar el campo después de escanear
+        }
+    });
+
+    function BuscarEtiquetaManual(){
+        var valor = document.getElementById("input-search").value;
+
+        var data = {
+            clave: valor
+        };
+
+        fetch('http://192.100.6.246:80/verificar', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            document.getElementById("input-search").value = '';
+            window.location.href = "/articulo";
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    
+
+
+
+</script>

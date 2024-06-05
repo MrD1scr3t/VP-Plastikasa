@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('../partials/head.html') %>
+    <%- include('../partials/navigation.html') %>
+</head>
+
+<body>
+    <div class="d-flex mt-3">
+        <div id="cont" class="container mt-5">
+            <div class="row">
+                <div id="rec" class="col">
+                  <div  class="space">
+                    <span class="titulo">Código: <span class="info" id="clave"></span></span>
+                  </div>
+                  <div class="space">
+                    <span class="titulo"><span class="info" id="descripcion"></span></span>
+                  </div>
+                    <img id="imgblob" src="" class="responsive-img">
+                </div>
+                
+                <div id="rec" class="col text-center mtp font-white">
+
+                    <div class="mbp text-start">
+                        <span class="titulo">Existencia: <span class="info" id="exist"></span></span>
+                    </div>
+
+                    <table class="table infot">
+                        <thead>
+                          <tr>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio</th>
+                          </tr>
+                        </thead>
+                        <tbody id="precios">
+                          <tr>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                          </tr>
+                          <tr>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    Los precios pueden cambiar sin previo aviso
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    
+
+    window.addEventListener('resize', function() {
+        var element = document.getElementById('rec')
+        if (window.innerWidth <= 764) {
+            element.classList.remove('col');
+            element.classList.add('col-12');
+        } else {
+            element.classList.remove('col-12');
+            element.classList.add('col');
+        }
+
+    });
+
+
+    $(document).ready(function() {
+
+    var objeto = JSON.parse(localStorage.getItem('ObjetoGuardado'))
+
+    // console.log(objeto.imagen)
+
+    var descripcion = document.getElementById('descripcion');
+
+    descripcion.innerHTML =  objeto.descripcion
+    
+    if (objeto.imagen != null && objeto.imagen != undefined){
+
+      var imagen = {
+        type: 'image/png', // Supongamos que es una imagen PNG
+        data: objeto.imagen.data // Supongamos que es un array de datos
+      };
+
+      // console.log(imagen)
+      var uint8Array = new Uint8Array(imagen.data);
+
+      // Crear un Blob a partir de los datos
+      var blob = new Blob([uint8Array], { type: imagen.type });
+
+      // Crear un objeto FileReader
+      var reader = new FileReader();
+
+      // Leer el blob como una URL de datos
+      reader.onload = function(event) {
+        var dataURL = event.target.result;
+
+        // Actualizar el atributo src de la etiqueta img
+        document.getElementById('imgblob').src = dataURL;
+      };
+
+      reader.readAsDataURL(blob);
+
+    }else{
+        document.getElementById('imgblob').src = '/img/PhotoProductNotSet.png';
+    }
+
+
+    var tmp
+
+    var suc = JSON.parse(localStorage.getItem('Sucursal'))
+    tmp = JSON.parse(localStorage.getItem('Tiempo'))
+
+    // console.log(suc)
+    // console.log(tmp)
+    var sucursal = document.getElementById('sucursal');
+    sucursal.innerHTML = suc;
+
+    function updateProgressBar(percentage) {
+    $('#progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+    }
+
+    // Simulación de progreso (aumenta en 10 cada segundo)
+    let progress = 0;
+    const interval = setInterval(function() {
+      progress += 10;
+      updateProgressBar(progress);
+      // Detener la simulación cuando alcanza el 100%
+      if (progress >= 100) {
+        clearInterval(interval);
+        window.location.href = "/";
+      }
+    },  parseInt(tmp));
+    
+    
+
+    var existencias = document.getElementById('exist');
+
+    existencias.innerHTML = objeto.existencia
+
+    var precios = objeto.tablaprecios;
+
+    var codigo = document.getElementById('clave')
+
+    codigo.innerHTML = objeto.clave
+
+    var tabla = document.getElementById('precios');
+
+    tabla.innerHTML = generarTDs(precios);
+
+    function generarTDs(objeto) {
+
+      var tds = ''; // String para almacenar los td generados
+      // Recorrer el arreglo de objetos
+      objeto.forEach(function(item) {
+
+        // console.log(item)
+        // Agregar un td para cada propiedad del objeto
+        tds += '<tr>';
+        tds += '<td class="tdprecios align-middle">' + item.cantidad + '</td>';
+        tds += '<td class="tdprecios align-middle">' + item.precio + '</td>';
+        tds += '</tr>';
+
+        // console.log(tds)
+      });
+      return tds; // Retornar los td generados
+    }
+
+
+    // Función para actualizar el ProgressBar
+    
+
+    // console.log(JSON.parse(localStorage.getItem('ObjetoGuardado')))
+    
+  });
+</script>

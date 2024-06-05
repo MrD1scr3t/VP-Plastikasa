@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Lector <%= title %>
+        </title>
+        <%- include('partials/head.html') %>
+        
+        
+    </head>
+
+<script>
+
+var tiempoMaximoEspera = 5000; // Por ejemplo, 5000 milisegundos (5 segundos)
+
+// Variable para almacenar el temporizador
+var temporizadorRespuesta;
+
+// Función para iniciar el temporizador
+function iniciarTemporizador() {
+    temporizadorRespuesta = setTimeout(function() {
+        // Si no hay respuesta después del tiempo establecido, muestra la alerta
+        alert("¡No se ha podido conectar con el servidor!");
+    }, tiempoMaximoEspera);
+}
+
+// Función para detener el temporizador
+function detenerTemporizador() {
+    clearTimeout(temporizadorRespuesta);
+}
+
+// Llama a iniciarTemporizador cuando esperas una respuesta
+
+
+
+var port, ip;
+
+function ObtenerSucursal(ip, port){
+    fetch(`http://${ip}:${port}/sucursal`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            }
+        })
+    .then(response => {
+        if (response.status === 404) { // Verifica si la respuesta es 404
+            window.alert("Sin conexion a la base de datos!"); // Redirecciona a la página de no encontrado
+            return; // Detiene la ejecución adicional del código
+        }
+        return response.json(); // Procesa la respuesta como JSON si no es un error 404
+    })
+    .then(data => {
+        if (data) { // Asegúrate de que data existe para evitar errores en caso de redirección
+            detenerTemporizador();
+            // console.log(data)
+            var sucursal = document.getElementById('sucursal-tittle');
+            sucursal.innerHTML = data.sucursal;
+            document.body.classList.remove('hidden');
+            var search = document.getElementById('input-search');
+            search.focus();
+            // console.log('Respuesta del servidor:', data.sucursal);
+            localStorage.setItem('Sucursal', JSON.stringify(data.sucursal));
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+    
+function ObtenerIP(){
+    fetch('/ip')
+    .then(response => response.text())
+    .then(data => {
+        // Mostrar el valor de portback en la página
+        ip = data;
+        // console.log(ip)
+    })
+    .catch(error => {
+        // Manejar cualquier error que ocurra durante la solicitud
+        console.error('Error al obtener el portback:', error);
+    });
+}
+
+function ObtenerPort(){
+    // $("#input-search").focus();
+
+    fetch('/portback')
+    .then(response => response.text())
+    .then(data => {
+        // Mostrar el valor de portback en la página
+        port = data;
+        iniciarTemporizador();
+        ObtenerSucursal(ip, port);
+    })
+    .catch(error => {
+        // Manejar cualquier error que ocurra durante la solicitud
+        console.error('Error al obtener el portback:', error);
+    });
+
+}
+
+function ObtenerTiempo(){
+    fetch('/tiempo')
+    .then(response => response.text())
+    .then(data => {
+        // Mostrar el valor de portback en la páginadata;
+        localStorage.setItem('Tiempo', JSON.stringify(data));
+    })
+    .catch(error => {
+        // Manejar cualquier error que ocurra durante la solicitud
+        console.error('Error al obtener tiempo:', error);
+    });
+}
+
+ObtenerTiempo()
+ObtenerIP()
+ObtenerPort()
+
+
+
+</script>
+
+    <body  class="hidden">
+        <div class="container">
+
+            <div class="divp">
+                <div class="col-xs-12 text-center">
+                    
+                    <div id="elemento-encabezados">
+                        <img src="/img/logo.png" alt="Logo" class="mt-5 mb-2">
+                        <h2 id="sucursal-tittle"></h2>
+                     
+                        <h2>¿Que producto quieres verificar?</h2>
+                        <p>Escanea el código de barras para verificar el producto</p>
+                    </div>
+
+                    <div class="input-group">
+                        <input  type="text" class="form-control sh" placeholder="Ingresa un código" aria-label="Ingresa un código" aria-describedby="basic-addon2" id="input-search" autocomplete="off">
+                        <div class="input-group-append">
+                          <span class="input-group-text" id="basic-addon2"><i id="btnTeclado" class="fas fa-keyboard" style="font-size: xx-large; color: white;"></i></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
+
+
+<script>
+
+    // Llama a la función enterFullscreen() cuando la página se carg
+    const input = document.getElementById('elemento-input');
+    const teclado = document.getElementById('elemento-teclado');
+    const encabezados = document.getElementById('elemento-encabezados');
+    const navbar =$('#barra');
+    
+    var search = document.getElementById('input-search');
+    var intervalId;
+
+    document.getElementById('btnTeclado').onclick = () => {
+        window.location.href = "/teclado"
+    };
+
+    window.onload = function() {
+        $("#input-search").focus();
+    };
+
+    function addNumber(number) {
+        var valor = search.value ;
+        if(valor === undefined) {
+            var valor = '';
+        }
+        valor = valor + number;
+        search.value = valor;
+    }
+
+    function delNumber() {
+        var valor = search.value;
+        search.value = valor.slice(0,-1);
+    }
+
+    document.getElementById('input-search').addEventListener('keypress', function(event) {
+        var barcode = event.target.value;
+        if (event.keyCode === 13) { // 13 es el código de tecla "Enter"
+
+            var valor = document.getElementById("input-search").value;
+
+            var data = {
+                clave: valor
+            };
+
+            fetch(`http://${ip}:${port}/verificar`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.status === 404) { // Verifica si la respuesta es 404
+                    window.location.href = "/not-found"; // Redirecciona a la página de no encontrado
+                    return; // Detiene la ejecución adicional del código
+                }
+                return response.json(); // Procesa la respuesta como JSON si no es un error 404
+            })
+            .then(data => {
+                if (data) { // Asegúrate de que data existe para evitar errores en caso de redirección
+                    // console.log('Respuesta del servidor:', data);
+                    document.getElementById("input-search").value = '';
+                    localStorage.setItem('ObjetoGuardado', JSON.stringify(data));
+                    window.location.href = "/articulo";
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            // console.log('Código de barras escaneado:', barcode);
+
+            // Aquí puedes hacer lo que quieras con el código de barras escaneado
+            event.target.value = ''; // Limpiar el campo después de escanear
+        }
+    });
+
+</script>

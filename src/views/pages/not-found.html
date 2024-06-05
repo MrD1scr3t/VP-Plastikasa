@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('../partials/head.html') %>
+    <%- include('../partials/navigation.html') %>
+</head>
+
+<body>
+    <div class="not-found d-flex text-center align-items-center">
+        <div class="container row-cols-1">
+            <img src="/img/icon-not-found.png" alt="" class="col img-not-found">
+            <h2 class="col justify-content-center">
+                Producto no encontrado
+            </h2>
+        </div>
+    </div>
+</body>
+
+<script>
+    function updateProgressBar(percentage) {
+      $('#progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+    }
+
+
+    window.onload = function(){
+      var suc = JSON.parse(localStorage.getItem('Sucursal'))
+      var sucursal = document.getElementById('sucursal');
+      sucursal.innerHTML = suc;
+    }
+
+    // Simulación de progreso (aumenta en 10 cada segundo)
+    let progress = 0;
+    const interval = setInterval(function() {
+      progress += 5;
+      updateProgressBar(progress);
+      // Detener la simulación cuando alcanza el 100%
+      if (progress >= 100) {
+        clearInterval(interval);
+        window.location.href = "/";
+      }
+    }, 1000);
+</script>
+
+</html>

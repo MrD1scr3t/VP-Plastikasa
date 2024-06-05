@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Lector <%= title %>
+        </title>
+        <%- include('../partials/head.html') %>
+        <%- include('../partials/navigation.html') %>
+    </head>
+
+    <script>
+
+        var port, ip;
+
+        function ObtenerIP(){
+            fetch('/ip')
+            .then(response => response.text())
+            .then(data => {
+                // Mostrar el valor de portback en la página
+                ip = data;
+            })
+            .catch(error => {
+                // Manejar cualquier error que ocurra durante la solicitud
+                console.error('Error al obtener el portback:', error);
+            });
+        }
+
+        function ObtenerPort(){
+            fetch('/portback')
+            .then(response => response.text())
+            .then(data => {
+                // Mostrar el valor de portback en la página
+                port = data;
+            })
+            .catch(error => {
+                // Manejar cualquier error que ocurra durante la solicitud
+                console.error('Error al obtener el portback:', error);
+            });
+
+        }
+
+        ObtenerIP()
+        ObtenerPort()
+
+    </script>
+
+    <body>
+
+        
+        <div class="container">
+
+
+            <div class="divp">
+                <div class="col-xs-1 text-center">
+                    
+                    
+
+                    <div class="input-group mb-3 mt-5">
+                        <input  type="text" class="form-control sh" placeholder="Ingresa un código" aria-label="Ingresa un código" aria-describedby="basic-addon2" id="input-search">
+                        <div class="input-group-append">
+                          <span class="input-group-text" id="basic-addon2"><i id="btnTeclado" class="fas fa-keyboard" style="font-size: xx-large; color: white;"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="row d-flex justify-content-center fade" id="elemento-teclado">
+                        <div id="pad" class="col-xl-10 col-lg-10 col-xs-10 row">
+                            <% data.arregloTeclado.forEach(function(tecla, i) {
+                                switch(tecla.val) {  
+                                    case 'delete' : %>
+                                        <div class="teclado-custom-col px-1">
+                                            <button class="btn-lector btn-teclado" onclick="delNumber()" id="btnDelete">
+                                                <img class="img-icon" src="/img/icon-delete.png" alt="">
+                                            </button>
+                                        </div>
+                                    <% break;
+                                    case 'search' : %>
+                                        <div class="teclado-custom-col-double px-1">
+                                            <button class="btn-lector btn-teclado" onclick="BuscarEtiquetaManual()">
+                                                Buscar<img class="img-icon mx-normal" src="/img/icon-search.png" alt="">
+                                            </button>
+                                        </div>
+                                    <% break;
+                                    default: %>
+                                        <div class="teclado-custom-col px-1">
+                                            <button class="btn-lector btn-teclado" onclick='addNumber("<%= tecla.val %>")'>
+                                                <%= tecla.val %>
+                                            </button>
+                                        </div>
+                                    <% break;
+                                }
+                            }); %>
+                        </div>
+                    </div>
+                    
+
+                    
+
+
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
+
+
+<script>
+
+    const input = document.getElementById('elemento-input');
+    const teclado = document.getElementById('elemento-teclado');
+    const encabezados = document.getElementById('elemento-encabezados');
+    const borrarBtn = document.getElementById('btnDelete');
+    const navbar =$('#barra');
+    const pad =$('#pad');
+    var search = document.getElementById('input-search');
+    var intervalId;
+
+    window.onload = function(){
+      var suc = JSON.parse(localStorage.getItem('Sucursal'))
+      var sucursal = document.getElementById('sucursal');
+      sucursal.innerHTML = suc;
+    }
+
+
+    function addNumber(number) {
+        var valor = search.value ;
+        if(valor === undefined) {
+            var valor = '';
+        }
+        valor = valor + number;
+        search.value = valor;
+    }
+
+    function delNumber() {
+        var valor = search.value;
+        search.value = valor.slice(0,-1);
+    }
+
+    borrarBtn.addEventListener('mousedown', function() {
+        intervalId = setInterval(delNumber, 50); 
+    });
+
+    borrarBtn.addEventListener('mouseup', function() {
+        clearInterval(intervalId); 
+    });
+
+    
+
+
+    function BuscarEtiquetaManual(){
+        
+        var valor = document.getElementById("input-search").value;
+
+        if(valor === ''){
+            window.alert('Por favor introduzca un codigo');
+        }else{
+            var data = {
+                clave: valor
+            };
+
+            fetch(`http://${ip}:${port}/verificar`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.status === 404) { // Verifica si la respuesta es 404
+                    window.location.href = "/not-found"; // Redirecciona a la página de no encontrado
+                    return; // Detiene la ejecución adicional del código
+                }
+                return response.json(); // Procesa la respuesta como JSON si no es un error 404
+            })
+            .then(data => {
+                if (data) { // Asegúrate de que data existe para evitar errores en caso de redirección
+                    // console.log('Respuesta del servidor:', data);
+                    document.getElementById("input-search").value = '';
+                    localStorage.setItem('ObjetoGuardado', JSON.stringify(data));
+                    window.location.href = "/articulo";
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        }
+    }
+
+</script>

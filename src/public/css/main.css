@@ -1,0 +1,344 @@
+:root {
+    --color-oficial-light: #ff0a0f;
+    --color-text-light: white;
+    --color-oficial-dark: black;
+}
+
+body {
+    background: var(--color-oficial-light);  /* fallback for old browsers */
+    position: relative;
+    min-height: 100vh;
+    color: var(--color-text-light);
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.responsive-img {
+    max-width: 100%;
+    max-height: 70%;
+}
+
+.navbar{
+    background: var(--color-oficial-light);
+}
+
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+input {
+    color: var(--color-text-light) !important;
+}
+
+.not-found {
+    height: 100vh;
+}
+
+.input-group-text i {
+    font-size: 1rem; /* Ajusta el tamaño del icono según sea necesario */
+  }
+
+.btn-lector-input {
+    background: transparent;
+    position: absolute;
+    border: 0;
+    right: 35%;
+    width: 100px;
+}
+
+.btn-lector {
+    background: transparent;
+    border: solid 2px;
+    border-radius: 10px;
+    border-color: white;
+    color: var(--color-text-light);
+}
+
+.btn-search-padding {
+    padding: 25px;
+}
+
+.btn-teclado {
+    padding: 25px 30px;
+    font-size: 20px;
+    height: 80px;
+    width: 100%;
+    transition: 150ms;
+}
+
+.img-keyboard {
+    width:70px;
+}
+
+.btn-teclado:active {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+    transition: 150ms;
+}
+
+.btn-lector:focus {
+    background: transparent;
+}
+
+.btn-lector::placeholder {
+    color: var(--color-text-light);
+    opacity: 1;
+}
+
+.btn-lector::-ms-placeholder {
+    color: var(--color-text-light);
+    opacity: 1;
+}
+
+.img-icon {
+    width: 25px;
+}
+
+
+.table {
+    color: white !important;
+}
+
+.img-not-found {
+    width: 150px;
+}
+
+#barra.fade{
+    display: none;
+}
+
+.move1 {
+    position: relative;
+    animation-name: movimiento1;
+    animation-duration: 0.3s;
+    animation-iteration-count: 1;
+}
+
+@keyframes movimiento1 {
+    0% { top:210px;}
+    100%   {top:0px;}
+}
+
+.tdprecios{
+    height: 4em;
+}
+
+#elemento-encabezados {
+    opacity: 1;
+    transition-delay: 10s;
+    -webkit-transition: opacity 0.4s ease-in-out;
+    -moz-transition: opacity 0.4s ease-in-out;
+    -ms-transition:  opacity 0.4s ease-in-out;
+    -o-transition:  opacity 0.4s ease-in-out;
+    transition:  opacity 0.4s ease-in-out;
+    height: 240px;
+}
+
+#elemento-encabezados.fade {
+    opacity: 0;
+    transition-delay: 10s;
+    -webkit-transition: opacity 0.4s ease-in-out;
+    -moz-transition: opacity 0.4s ease-in-out;
+    -ms-transition:  opacity 0.4s ease-in-out;
+    -o-transition:  opacity 0.4s ease-in-out;
+    transition:  opacity 0.4s ease-in-out;
+    height: 0px !important;
+}
+
+#elemento-teclado {
+    position:relative;
+    z-index: 1000;
+    opacity: 0;
+    transition-delay: 0.3s;
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -moz-transition: opacity 0.3s ease-in-out;
+    -ms-transition:  opacity 0.3s ease-in-out;
+    -o-transition:  opacity 0.3s ease-in-out;
+    transition:  opacity 0.3s ease-in-out;
+    height: 500px;
+}
+
+.divp{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente */
+    height: 100vh; /* Hace que el contenedor tenga el alto de la ventana */
+    text-align: center;
+}
+
+#sucursal-tittle{
+    height: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.titulo{
+    font-weight: bold;
+    font-size: 1.33em;
+}
+
+.info{
+    font-weight: lighter;
+}
+
+.infot{
+    font-size: 1.33em;
+}
+
+#elemento-teclado.fade {
+    height: 500px;
+    opacity: 1;
+}
+
+.transparent-bg {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+/* Clase personalizada para el teclado virtual */
+.teclado-custom-col {
+    flex: 0 0 10%; /* Cada botón ocupa el 10% del total */
+    max-width: 10%; /* El máximo ancho también es 10% *//* Reduce el padding según necesites */
+    margin-bottom: -150px; /* Reduce el margin según necesites */
+}
+
+/* Para botones más grandes como 'delete' y 'search' */
+.teclado-custom-col-double {
+    flex: 0 0 20%; /* Doble ancho para algunos botones */
+    max-width: 20%;
+}
+
+.btn-teclado-mini {
+    padding: 10px 0px;
+    font-size: 10px;
+    height: 40px;
+    width: 100%;
+    transition: 150ms;
+}
+
+.space{
+    margin-bottom: 2%;
+}
+
+.img-icon-mini{
+    width: 10px;
+}
+
+.mx-mini{
+    margin-left: 1rem !important;
+}
+.mx-normal{
+    margin-right: 1rem !important;
+    margin-left: 1rem !important;
+}
+
+@media (max-width: 1355px) {
+    .mx-normal{ margin-right: 0rem !important; margin-left: 1rem !important;}
+}
+
+@media (max-width: 1200px) {
+    .img-icon{
+        width: 15px;
+    }
+
+    .btn-teclado {
+        padding: 10px 0px;
+        font-size: 15px;
+        /* height: 40px; */
+        width: 100%;
+        transition: 150ms;
+    }
+
+    .input-group{
+        margin-left: 20% !important;
+        margin-right: 20% !important;
+        width: 60% !important;
+    }
+
+    .mtp{
+        margin-top: 0em !important;
+    }
+
+    /* .mrp{
+        margin-right: -50px !important;
+    } */
+
+    .mbp{margin-bottom: 1em !important;}
+}
+
+@media (max-width: 720px) {
+    .btn-teclado { 
+        height: 40px;
+    }
+
+    #sucursal{
+        display: none !important;
+    }
+
+    .tdprecios{
+        height: 1em;
+    }
+}
+
+.mbp{
+    margin-bottom: 3rem;
+}
+
+.mtp{
+    margin-top: 3rem;
+}
+
+.mrp{
+    margin-right: -100px;
+}
+
+.input-group {
+    background-color: #ff0000;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    padding: 10px;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+
+.form-control {
+    border: none;
+    background-color: transparent;
+    color: #fff;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border: none;
+}
+
+.form-control::placeholder {
+    color: #fff;
+    opacity: 1; /* Firefox */
+}
+
+.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #fff;
+}
+
+.form-control::-ms-input-placeholder { /* Microsoft Edge */
+    color: #fff;
+}
+
+.sh:hover {
+    background-color:#ff0000;
+    border-color: transparent;
+}
+
+.sh:focus {
+    background-color:#ff0000;
+    border-color: transparent;
+    box-shadow: none !important;
+}
+
