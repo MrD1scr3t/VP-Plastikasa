@@ -4,32 +4,32 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 // Nombre del adaptador de LAN inalámbrica (puede variar según el sistema operativo y configuración)
-// const wifiInterfaceName = 'Wi-Fi';
+const wifiInterfaceName = 'Wi-Fi';
 
 // // Obtener las interfaces de red
-// const networkInterfaces = os.networkInterfaces();
+const networkInterfaces = os.networkInterfaces();
 
 // // Bandera para saber si se encontró la IP
-// let found = false;
+let found = false;
 
-// var ip;
+var ip;
 
 // // Recorrer las interfaces de red
-// Object.keys(networkInterfaces).forEach(interfaceName => {
-//   if (interfaceName === wifiInterfaceName) {
-//     networkInterfaces[interfaceName].forEach(interface => {
-//       if (interface.family === 'IPv4' && !interface.internal) {
-//         ip = interface.address
-//         found = true
-//       }
-//     });
-//   }
-// });
+Object.keys(networkInterfaces).forEach(interfaceName => {
+  if (interfaceName === wifiInterfaceName) {
+    networkInterfaces[interfaceName].forEach(interface => {
+      if (interface.family === 'IPv4' && !interface.internal) {
+        ip = interface.address
+        found = true
+      }
+    });
+  }
+});
 
 // // Si no se encontró la IP
-// if (!found) {
-//   console.log(`No se encontró la dirección IP del adaptador de LAN inalámbrica (${wifiInterfaceName}).`);
-// }
+if (!found) {
+  console.log(`No se encontró la dirección IP del adaptador de LAN inalámbrica (${wifiInterfaceName}).`);
+}
 
 let portfront, portback
 

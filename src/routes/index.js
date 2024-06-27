@@ -15,10 +15,15 @@ for (const interfaceName in interfaces) {
     // Ignorar las interfaces que no son IPv4, son internas o son direcciones APIPA
         if (iface.family === 'IPv4' && !iface.internal && !iface.address.startsWith('169.254') && !interfaceName.startsWith('vEthernet')) {
             ip = iface.address;
+
+            console.log(ip)
         }
     }
 }
 
+// ip = '192.168.0.182';
+
+console.log(ip)
 
 router.get('/', (req, res) => {
     const viewsData = {

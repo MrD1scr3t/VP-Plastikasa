@@ -3,12 +3,24 @@
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
             Lector <%= title %>
         </title>
         <%- include('partials/head.html') %>
         
+
+        <style>
+
+            /* body{
+                pointer-events: none;
+            }
+
+            #btnTeclado{
+                pointer-events: auto;
+            } */
+
+        </style>
         
     </head>
 
@@ -138,7 +150,7 @@ ObtenerPort()
                     </div>
 
                     <div class="input-group">
-                        <input  type="text" class="form-control sh" placeholder="Ingresa un código" aria-label="Ingresa un código" aria-describedby="basic-addon2" id="input-search" autocomplete="off">
+                        <input  type="text" class="form-control sh" placeholder="Ingresa un código" aria-label="Ingresa un código" aria-describedby="basic-addon2" id="input-search" autocomplete="off"  autofocus>
                         <div class="input-group-append">
                           <span class="input-group-text" id="basic-addon2"><i id="btnTeclado" class="fas fa-keyboard" style="font-size: xx-large; color: white;"></i></span>
                         </div>
@@ -163,6 +175,33 @@ ObtenerPort()
     var search = document.getElementById('input-search');
     var intervalId;
 
+  
+    document.getElementById('input-search').addEventListener('blur', function(e) {
+            search.focus();
+    });
+
+    // // document.getElementById('input-search').addEventListener('focus', function(e)  {
+    // //     e.preventDefault();
+    // // });
+
+    // search.addEventListener('focus', (event) => {
+    //     event.preventDefault(); // Evita que se muestre el teclado
+    //     // inputElement.focus(); // Establece el enfoque en el campo de entrada
+    // });
+
+    search.addEventListener('click', function(e) {
+        e.preventDefault(); // Evita que se muestre el teclado
+        search.focus(); // Establece el enfoque en el campo de entrada
+    });
+
+    search.addEventListener('touchstart', function(e) {
+        e.preventDefault(); // Evita que el teclado aparezca
+        // Aquí puedes manejar lo que quieras que suceda cuando el input sea tocado
+    });
+
+
+    // document.addEventListener('click', keepFocus);
+
     document.getElementById('btnTeclado').onclick = () => {
         window.location.href = "/teclado"
     };
@@ -171,22 +210,15 @@ ObtenerPort()
         $("#input-search").focus();
     };
 
-    function addNumber(number) {
-        var valor = search.value ;
-        if(valor === undefined) {
-            var valor = '';
-        }
-        valor = valor + number;
-        search.value = valor;
-    }
-
-    function delNumber() {
-        var valor = search.value;
-        search.value = valor.slice(0,-1);
-    }
+  
+   
+    
 
     document.getElementById('input-search').addEventListener('keypress', function(event) {
         var barcode = event.target.value;
+
+        console.log(event)
+
         if (event.keyCode === 13) { // 13 es el código de tecla "Enter"
 
             var valor = document.getElementById("input-search").value;
@@ -194,6 +226,8 @@ ObtenerPort()
             var data = {
                 clave: valor
             };
+
+            console.log(data)
 
             fetch(`http://${ip}:${port}/verificar`, {
                 method: 'POST',

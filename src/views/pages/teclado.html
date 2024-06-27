@@ -147,7 +147,15 @@
         clearInterval(intervalId); 
     });
 
-    
+    document.getElementById('input-search').addEventListener('touchstart', function(e) {
+            // Evita que el teclado aparezca
+            e.preventDefault();
+            // Aquí puedes manejar lo que quieras que suceda cuando el input sea tocado
+
+    });
+
+
+
 
 
     function BuscarEtiquetaManual(){
