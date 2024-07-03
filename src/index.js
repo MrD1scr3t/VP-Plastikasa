@@ -26,7 +26,7 @@ Object.keys(networkInterfaces).forEach(interfaceName => {
   }
 });
 
-// // Si no se encontró la IP
+// // Si no se encontró la IP //
 if (!found) {
   console.log(`No se encontró la dirección IP del adaptador de LAN inalámbrica (${wifiInterfaceName}).`);
 }
